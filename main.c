@@ -9,8 +9,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define NUM_THREADS 10
-
 int main() {
 	srand(time(NULL));
 

@@ -1,5 +1,6 @@
 #include "matrix.h"
 
+#include <omp.h>
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -18,6 +19,7 @@ Matrix* matrix_create(int row, int col) {
 }
 
 void matrix_fill(Matrix *m, int n) {
+# pragma omp parallel for num_threads(NUM_THREADS) collapse(2)
 	for (int i = 0; i < m->rows; i++) {
 		for (int j = 0; j < m->cols; j++) {
 			m->entries[i][j] = n;
@@ -46,6 +48,7 @@ void matrix_print(Matrix* m) {
 
 Matrix* matrix_copy(Matrix* m) {
 	Matrix* mat = matrix_create(m->rows, m->cols);
+# pragma omp parallel for num_threads(NUM_THREADS) collapse(2)
 	for (int i = 0; i < m->rows; i++) {
 		for (int j = 0; j < m->cols; j++) {
 			mat->entries[i][j] = m->entries[i][j];
@@ -99,6 +102,7 @@ void matrix_randomize(Matrix* m, int n) {
 	// Max: 1 / sqrt(n)
 	double min = -1.0 / sqrt(n);
 	double max = 1.0 / sqrt(n);
+# pragma omp parallel for num_threads(NUM_THREADS) collapse(2)
 	for (int i = 0; i < m->rows; i++) {
 		for (int j = 0; j < m->cols; j++) {
 			m->entries[i][j] = uniform_distribution(min, max);
